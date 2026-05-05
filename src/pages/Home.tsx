@@ -21,8 +21,8 @@ export default function Home() {
       {/* 헤더 */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-bold m-0" style={{ color: '#F5F5F5' }}>시작 항목</h1>
-          <p className="text-xs mt-0.5" style={{ color: 'rgba(245,245,245,0.45)' }}>
+          <h1 className="text-xl font-bold m-0" style={{ color: '#1E293B' }}>시작 항목</h1>
+          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
             부팅 시 자동으로 실행할 항목을 관리합니다
           </p>
         </div>
@@ -37,11 +37,11 @@ export default function Home() {
       {/* 로딩 / 에러 */}
       {isLoading && (
         <div className="flex items-center justify-center flex-1">
-          <p style={{ color: 'rgba(245,245,245,0.4)' }}>불러오는 중…</p>
+          <p style={{ color: '#94A3B8' }}>불러오는 중…</p>
         </div>
       )}
       {isError && (
-        <div className="glass-sm p-4 text-sm" style={{ color: '#FF6B6B' }}>
+        <div className="glass-sm p-4 text-sm" style={{ color: '#DC2626' }}>
           ⚠️ API 서버에 연결할 수 없습니다. <code>python main.py --serve</code>가 실행 중인지 확인해 주세요.
         </div>
       )}
@@ -52,7 +52,7 @@ export default function Home() {
           {enabled.length > 0 && (
             <section className="flex flex-col gap-3">
               <h2 className="text-xs font-semibold uppercase tracking-wider m-0"
-                style={{ color: 'rgba(245,245,245,0.4)' }}>
+                style={{ color: '#94A3B8' }}>
                 활성 ({enabled.length})
               </h2>
               <div className="grid gap-4"
@@ -68,7 +68,7 @@ export default function Home() {
           {disabled.length > 0 && (
             <section className="flex flex-col gap-3">
               <h2 className="text-xs font-semibold uppercase tracking-wider m-0"
-                style={{ color: 'rgba(245,245,245,0.4)' }}>
+                style={{ color: '#94A3B8' }}>
                 비활성 ({disabled.length})
               </h2>
               <div className="grid gap-4"
@@ -84,7 +84,7 @@ export default function Home() {
           {items.length === 0 && (
             <div className="glass flex flex-col items-center justify-center gap-4 flex-1 min-h-48">
               <span style={{ fontSize: 48 }}>🚀</span>
-              <p className="text-sm" style={{ color: 'rgba(245,245,245,0.5)' }}>
+              <p className="text-sm" style={{ color: '#64748B' }}>
                 아직 항목이 없어요. 위의 버튼으로 추가해 보세요!
               </p>
             </div>

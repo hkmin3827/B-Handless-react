@@ -54,7 +54,7 @@ export default function ItemModal({ item, onClose }: Props) {
       >
         {/* 헤더 */}
         <div className="flex items-center justify-between">
-          <h2 className="font-bold text-base m-0" style={{ color: '#F5F5F5' }}>
+          <h2 className="font-bold text-base m-0" style={{ color: '#1E293B' }}>
             {isEdit ? '항목 수정' : '항목 추가'}
           </h2>
           <button className="btn-ghost px-2 py-1 text-sm" onClick={onClose}>✕</button>
@@ -62,7 +62,7 @@ export default function ItemModal({ item, onClose }: Props) {
 
         {/* 타입 선택 */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium" style={{ color: 'rgba(245,245,245,0.6)' }}>타입</label>
+          <label className="text-xs font-medium" style={{ color: '#64748B' }}>타입</label>
           <select
             className="select-glass"
             value={form.type}
@@ -76,7 +76,7 @@ export default function ItemModal({ item, onClose }: Props) {
 
         {/* 라벨 */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium" style={{ color: 'rgba(245,245,245,0.6)' }}>이름</label>
+          <label className="text-xs font-medium" style={{ color: '#64748B' }}>이름</label>
           <input
             className="input-glass"
             placeholder="항목 이름"
@@ -89,7 +89,7 @@ export default function ItemModal({ item, onClose }: Props) {
         {form.type === 'browser_url' && (
           <>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium" style={{ color: 'rgba(245,245,245,0.6)' }}>URL</label>
+              <label className="text-xs font-medium" style={{ color: '#64748B' }}>URL</label>
               <input
                 className="input-glass"
                 placeholder="https://example.com"
@@ -98,7 +98,7 @@ export default function ItemModal({ item, onClose }: Props) {
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium" style={{ color: 'rgba(245,245,245,0.6)' }}>브라우저</label>
+              <label className="text-xs font-medium" style={{ color: '#64748B' }}>브라우저</label>
               <select
                 className="select-glass"
                 value={form.browser}
@@ -118,7 +118,7 @@ export default function ItemModal({ item, onClose }: Props) {
         {/* exe/app 전용 */}
         {(form.type === 'exe' || form.type === 'app') && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium" style={{ color: 'rgba(245,245,245,0.6)' }}>실행 파일 경로</label>
+            <label className="text-xs font-medium" style={{ color: '#64748B' }}>실행 파일 경로</label>
             <input
               className="input-glass"
               placeholder="C:\Program Files\App\app.exe"
@@ -130,7 +130,7 @@ export default function ItemModal({ item, onClose }: Props) {
 
         {/* 딜레이 */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium" style={{ color: 'rgba(245,245,245,0.6)' }}>
+          <label className="text-xs font-medium" style={{ color: '#64748B' }}>
             딜레이 (초) — 부팅 후 이 시간만큼 기다렸다가 실행
           </label>
           <input
@@ -143,7 +143,7 @@ export default function ItemModal({ item, onClose }: Props) {
 
         {/* 에러 */}
         {error && (
-          <p className="text-xs px-3 py-2 rounded-lg" style={{ background: 'rgba(255,107,107,0.15)', color: '#FF6B6B' }}>
+          <p className="text-xs px-3 py-2 rounded-lg" style={{ background: 'rgba(255,107,107,0.10)', color: '#DC2626' }}>
             {error}
           </p>
         )}

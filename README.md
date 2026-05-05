@@ -53,7 +53,7 @@ npm run build
 src/
 ├── api.ts                  API 클라이언트 (fetch wrapper, 타입 정의)
 ├── App.tsx                 루트 컴포넌트 (QueryClientProvider + 레이아웃)
-├── index.css               전역 스타일 (글래스모피즘 유틸리티 클래스)
+├── index.css               전역 스타일 (매트 파스텔 유틸리티 클래스)
 ├── components/
 │   ├── OrbBackground.tsx   배경 장식 오브 (고정 위치)
 │   ├── Sidebar.tsx         접이식 사이드바 (64px ↔ 200px)
@@ -69,18 +69,20 @@ src/
 
 ## 디자인 시스템
 
-메인 컬러 `#6F9FF2` (블루) · `#B864D4` (퍼플)을 기반으로 한 글래스모피즘 UI입니다.
+메인 컬러 `#6F9FF2` (블루) · `#B864D4` (퍼플)을 기반으로 한 매트 파스텔 UI입니다.  
+배경은 `#F5F7FF` 화이트, 카드는 순백 배경 + 다층 그림자로 입체감을 표현합니다.  
+backdrop-filter 없이 `box-shadow`만으로 깊이를 만드는 그래픽 디자인 스타일입니다.
 
 ```css
 /* 주요 유틸리티 클래스 (index.css) */
-.glass          /* 반투명 카드 패널 */
-.glass-sm       /* 더 가벼운 유리 패널 */
-.btn-primary    /* 블루 액션 버튼 */
-.btn-ghost      /* 투명 보조 버튼 */
-.btn-danger     /* 빨간 삭제 버튼 */
+.glass          /* 매트 흰 카드 (3단 그림자) */
+.glass-sm       /* 가벼운 보조 카드 */
+.btn-primary    /* 블루→퍼플 그라디언트 버튼 */
+.btn-ghost      /* 파스텔 블루 보조 버튼 */
+.btn-danger     /* 연한 레드 삭제 버튼 */
 .toggle-track   /* 커스텀 토글 트랙 */
-.input-glass    /* 유리 스타일 인풋 */
-.select-glass   /* 유리 스타일 셀렉트 */
+.input-glass    /* 파스텔 베이스 인풋 */
+.select-glass   /* 파스텔 베이스 셀렉트 */
 .modal-overlay  /* 모달 배경 오버레이 */
 ```
 
@@ -117,4 +119,3 @@ api.browsers.list()            // GET    /api/browsers
 
 - 백엔드: `server/README.md`
 - 디자인 가이드: `docs/DESIGN.md`
-- 전체 구조: `docs/B-Handless_프로젝트구조.docx`

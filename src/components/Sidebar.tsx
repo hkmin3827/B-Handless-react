@@ -51,12 +51,12 @@ export default function Sidebar({ current, onChange }: Props) {
             className="flex items-center gap-3 p-2 rounded-xl transition-all duration-150 text-left"
             style={{
               background: current === item.id
-                ? 'linear-gradient(135deg, rgba(111,159,242,0.25), rgba(184,100,212,0.25))'
+                ? 'linear-gradient(135deg, #EEF4FF, #F5EEFF)'
                 : 'transparent',
               border: current === item.id
-                ? '1px solid rgba(111,159,242,0.4)'
+                ? '1px solid rgba(111,159,242,0.3)'
                 : '1px solid transparent',
-              color: current === item.id ? '#F5F5F5' : 'rgba(245,245,245,0.55)',
+              color: current === item.id ? '#1E293B' : '#64748B',
             }}
           >
             <span style={{ fontSize: 18, flexShrink: 0, width: 24, textAlign: 'center' }}>
@@ -71,7 +71,7 @@ export default function Sidebar({ current, onChange }: Props) {
 
       {/* 하단 버전 */}
       {expanded && (
-        <p className="text-xs text-center" style={{ color: 'rgba(245,245,245,0.25)' }}>
+        <p className="text-xs text-center" style={{ color: '#CBD5E1' }}>
           v0.3.0
         </p>
       )}

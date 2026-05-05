@@ -20,9 +20,9 @@
 
 body {
   margin: 0;
-  background: linear-gradient(135deg, #0f0c29 0%, #1a1040 35%, #2d1b69 70%, #1a0533 100%);
+  background: #F5F7FF;
   min-height: 100vh;
-  color: #F5F5F5;
+  color: #1E293B;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
@@ -30,23 +30,24 @@ body {
 
 #root { height: 100vh; display: flex; }
 
-/* ── 글래스 카드 ───────────────────────────────────────── */
+/* ── 매트 카드 ───────────────────────────────────────────── */
 .glass {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #FFFFFF;
+  border: 1px solid rgba(111, 159, 242, 0.15);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+  box-shadow:
+    0 2px 0 rgba(0,0,0,0.04),
+    0 6px 20px rgba(111,159,242,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.9);
 }
 
 .glass-sm {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #FFFFFF;
+  border: 1px solid rgba(111, 159, 242, 0.12);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.03),
+    0 4px 12px rgba(111,159,242,0.08);
 }
 
 /* ── 배경 장식 orb ─────────────────────────────────────── */
@@ -55,14 +56,14 @@ body {
   border-radius: 50%;
   pointer-events: none;
   filter: blur(80px);
-  opacity: 0.22;
+  opacity: 0.38;
   z-index: 0;
 }
 
 /* ── 스크롤바 ──────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(111,159,242,0.4); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(111,159,242,0.35); border-radius: 2px; }
 
 /* ── 토글 스위치 ───────────────────────────────────────── */
 .toggle-track {
@@ -74,13 +75,13 @@ body {
   flex-shrink: 0;
 }
 .toggle-track.on  { background: linear-gradient(90deg, #6F9FF2, #B864D4); }
-.toggle-track.off { background: rgba(255,255,255,0.15); }
+.toggle-track.off { background: rgba(0,0,0,0.12); }
 .toggle-thumb {
   position: absolute; top: 3px;
   width: 18px; height: 18px;
   border-radius: 50%;
-  background: #F5F5F5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
   transition: left 0.2s;
 }
 .toggle-track.on  .toggle-thumb { left: 23px; }
@@ -98,26 +99,26 @@ body {
 .btn-primary:active { transform: translateY(0); }
 
 .btn-ghost {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 10px; color: #F5F5F5;
+  background: rgba(111,159,242,0.08);
+  border: 1px solid rgba(111,159,242,0.2);
+  border-radius: 10px; color: #1E293B;
   cursor: pointer; transition: background 0.15s;
 }
-.btn-ghost:hover { background: rgba(255,255,255,0.13); }
+.btn-ghost:hover { background: rgba(111,159,242,0.15); }
 
 .btn-danger {
-  background: rgba(255,107,107,0.15);
-  border: 1px solid rgba(255,107,107,0.3);
-  border-radius: 10px; color: #FF6B6B;
+  background: rgba(255,107,107,0.10);
+  border: 1px solid rgba(255,107,107,0.25);
+  border-radius: 10px; color: #DC2626;
   cursor: pointer; transition: background 0.15s;
 }
-.btn-danger:hover { background: rgba(255,107,107,0.25); }
+.btn-danger:hover { background: rgba(255,107,107,0.18); }
 
 /* ── 모달 오버레이 ─────────────────────────────────────── */
 .modal-overlay {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(6px);
+  background: rgba(15,10,40,0.30);
+  backdrop-filter: blur(4px);
   z-index: 100;
   display: flex; align-items: center; justify-content: center;
   padding: 16px;
@@ -125,25 +126,25 @@ body {
 
 /* ── 입력 필드 ─────────────────────────────────────────── */
 .input-glass {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: #F5F7FF;
+  border: 1.5px solid rgba(111,159,242,0.25);
   border-radius: 10px;
-  color: #F5F5F5;
+  color: #1E293B;
   padding: 10px 14px;
   font-size: 14px;
   width: 100%;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.input-glass::placeholder { color: rgba(245,245,245,0.35); }
-.input-glass:focus { border-color: rgba(111,159,242,0.6); box-shadow: 0 0 0 3px rgba(111,159,242,0.15); }
+.input-glass::placeholder { color: #94A3B8; }
+.input-glass:focus { border-color: #6F9FF2; box-shadow: 0 0 0 3px rgba(111,159,242,0.12); }
 
 /* ── 셀렉트 ────────────────────────────────────────────── */
 .select-glass {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: #F5F7FF;
+  border: 1.5px solid rgba(111,159,242,0.25);
   border-radius: 10px;
-  color: #F5F5F5;
+  color: #1E293B;
   padding: 10px 14px;
   font-size: 14px;
   width: 100%;
@@ -151,4 +152,4 @@ body {
   cursor: pointer;
   appearance: none;
 }
-.select-glass option { background: #1a1040; }
+.select-glass option { background: #FFFFFF; color: #1E293B; }

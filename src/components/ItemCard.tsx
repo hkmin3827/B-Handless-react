@@ -62,17 +62,17 @@ export default function ItemCard({ item, onEdit }: Props) {
       </div>
 
       {/* 라벨 */}
-      <p className="font-semibold text-sm leading-snug" style={{ color: '#F5F5F5' }}>
+      <p className="font-semibold text-sm leading-snug" style={{ color: '#1E293B' }}>
         {item.label}
       </p>
 
       {/* 부가 정보 */}
-      <p className="text-xs truncate" style={{ color: 'rgba(245,245,245,0.45)' }}>
+      <p className="text-xs truncate" style={{ color: '#64748B' }}>
         {item.url ?? item.path ?? '—'}
       </p>
 
       {item.delay_seconds > 0 && (
-        <p className="text-xs" style={{ color: 'rgba(245,245,245,0.35)' }}>
+        <p className="text-xs" style={{ color: '#94A3B8' }}>
           ⏱ {item.delay_seconds}초 후 실행
         </p>
       )}

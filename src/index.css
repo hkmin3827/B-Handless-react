@@ -5,22 +5,26 @@
   --color-secondary: #B864D4;
   --color-white-soft: #F5F5F5;
 
-  --color-badge-red:    #FF6B6B;
+  --color-badge-red: #FF6B6B;
   --color-badge-yellow: #FFD93D;
-  --color-badge-green:  #6BCB77;
-  --color-badge-blue:   #4D96FF;
-  --color-badge-pink:   #FF6FC8;
+  --color-badge-green: #6BCB77;
+  --color-badge-blue: #4D96FF;
+  --color-badge-pink: #FF6FC8;
   --color-badge-orange: #FF9A3C;
 
   --font-sans: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
 }
 
 /* ── 전체 배경 ─────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  background: #F5F7FF;
+  background: #F5F5F5;
   min-height: 100vh;
   color: #1E293B;
   font-family: var(--font-sans);
@@ -28,7 +32,10 @@ body {
   overflow: hidden;
 }
 
-#root { height: 100vh; display: flex; }
+#root {
+  height: 100vh;
+  display: flex;
+}
 
 /* ── 매트 카드 ───────────────────────────────────────────── */
 .glass {
@@ -36,9 +43,9 @@ body {
   border: 1px solid rgba(111, 159, 242, 0.15);
   border-radius: 16px;
   box-shadow:
-    0 2px 0 rgba(0,0,0,0.04),
-    0 6px 20px rgba(111,159,242,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.9);
+    0 2px 0 rgba(0, 0, 0, 0.04),
+    0 6px 20px rgba(111, 159, 242, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .glass-sm {
@@ -46,8 +53,8 @@ body {
   border: 1px solid rgba(111, 159, 242, 0.12);
   border-radius: 12px;
   box-shadow:
-    0 1px 0 rgba(0,0,0,0.03),
-    0 4px 12px rgba(111,159,242,0.08);
+    0 1px 0 rgba(0, 0, 0, 0.03),
+    0 4px 12px rgba(111, 159, 242, 0.08);
 }
 
 /* ── 배경 장식 orb ─────────────────────────────────────── */
@@ -61,73 +68,120 @@ body {
 }
 
 /* ── 스크롤바 ──────────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(111,159,242,0.35); border-radius: 2px; }
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(111, 159, 242, 0.35);
+  border-radius: 2px;
+}
 
 /* ── 토글 스위치 ───────────────────────────────────────── */
 .toggle-track {
-  width: 44px; height: 24px;
+  width: 44px;
+  height: 24px;
   border-radius: 12px;
   transition: background 0.2s;
   position: relative;
   cursor: pointer;
   flex-shrink: 0;
 }
-.toggle-track.on  { background: linear-gradient(90deg, #6F9FF2, #B864D4); }
-.toggle-track.off { background: rgba(0,0,0,0.12); }
+
+.toggle-track.on {
+  background: linear-gradient(90deg, #6F9FF2, #B864D4);
+}
+
+.toggle-track.off {
+  background: rgba(0, 0, 0, 0.12);
+}
+
 .toggle-thumb {
-  position: absolute; top: 3px;
-  width: 18px; height: 18px;
+  position: absolute;
+  top: 3px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #FFFFFF;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
   transition: left 0.2s;
 }
-.toggle-track.on  .toggle-thumb { left: 23px; }
-.toggle-track.off .toggle-thumb { left: 3px; }
+
+.toggle-track.on .toggle-thumb {
+  left: 23px;
+}
+
+.toggle-track.off .toggle-thumb {
+  left: 3px;
+}
 
 /* ── 버튼 ──────────────────────────────────────────────── */
 .btn-primary {
   background: linear-gradient(135deg, #6F9FF2, #B864D4);
-  border: none; border-radius: 10px;
-  color: #F5F5F5; font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  color: #F5F5F5;
+  font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(111,159,242,0.45); }
-.btn-primary:active { transform: translateY(0); }
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(111, 159, 242, 0.45);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
 
 .btn-ghost {
-  background: rgba(111,159,242,0.08);
-  border: 1px solid rgba(111,159,242,0.2);
-  border-radius: 10px; color: #1E293B;
-  cursor: pointer; transition: background 0.15s;
+  background: rgba(111, 159, 242, 0.08);
+  border: 1px solid rgba(111, 159, 242, 0.2);
+  border-radius: 10px;
+  color: #1E293B;
+  cursor: pointer;
+  transition: background 0.15s;
 }
-.btn-ghost:hover { background: rgba(111,159,242,0.15); }
+
+.btn-ghost:hover {
+  background: rgba(111, 159, 242, 0.15);
+}
 
 .btn-danger {
-  background: rgba(255,107,107,0.10);
-  border: 1px solid rgba(255,107,107,0.25);
-  border-radius: 10px; color: #DC2626;
-  cursor: pointer; transition: background 0.15s;
+  background: rgba(255, 107, 107, 0.10);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  border-radius: 10px;
+  color: #DC2626;
+  cursor: pointer;
+  transition: background 0.15s;
 }
-.btn-danger:hover { background: rgba(255,107,107,0.18); }
+
+.btn-danger:hover {
+  background: rgba(255, 107, 107, 0.18);
+}
 
 /* ── 모달 오버레이 ─────────────────────────────────────── */
 .modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(15,10,40,0.30);
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 10, 40, 0.30);
   backdrop-filter: blur(4px);
   z-index: 100;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
 }
 
 /* ── 입력 필드 ─────────────────────────────────────────── */
 .input-glass {
   background: #F5F7FF;
-  border: 1.5px solid rgba(111,159,242,0.25);
+  border: 1.5px solid rgba(111, 159, 242, 0.25);
   border-radius: 10px;
   color: #1E293B;
   padding: 10px 14px;
@@ -136,13 +190,20 @@ body {
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.input-glass::placeholder { color: #94A3B8; }
-.input-glass:focus { border-color: #6F9FF2; box-shadow: 0 0 0 3px rgba(111,159,242,0.12); }
+
+.input-glass::placeholder {
+  color: #94A3B8;
+}
+
+.input-glass:focus {
+  border-color: #6F9FF2;
+  box-shadow: 0 0 0 3px rgba(111, 159, 242, 0.12);
+}
 
 /* ── 셀렉트 ────────────────────────────────────────────── */
 .select-glass {
   background: #F5F7FF;
-  border: 1.5px solid rgba(111,159,242,0.25);
+  border: 1.5px solid rgba(111, 159, 242, 0.25);
   border-radius: 10px;
   color: #1E293B;
   padding: 10px 14px;
@@ -152,4 +213,8 @@ body {
   cursor: pointer;
   appearance: none;
 }
-.select-glass option { background: #FFFFFF; color: #1E293B; }
+
+.select-glass option {
+  background: #FFFFFF;
+  color: #1E293B;
+}

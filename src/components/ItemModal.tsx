@@ -4,6 +4,7 @@ import { api, type StartupItem } from '../api'
 
 interface Props {
   item?: StartupItem
+  defaultType?: StartupItem['type']
   onClose: () => void
 }
 
@@ -18,14 +19,15 @@ const EMPTY = {
   args: [] as string[],
 }
 
-export default function ItemModal({ item, onClose }: Props) {
+export default function ItemModal({ item, defaultType, onClose }: Props) {
   const qc = useQueryClient()
   const isEdit = !!item
 
-  const [form, setForm] = useState({ ...EMPTY, ...item })
+  const base = defaultType ? { ...EMPTY, type: defaultType } : EMPTY
+  const [form, setForm] = useState({ ...base, ...item })
   const [error, setError] = useState('')
 
-  useEffect(() => { setForm({ ...EMPTY, ...item }) }, [item])
+  useEffect(() => { setForm({ ...base, ...item }) }, [item]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const { data: browsers = [] } = useQuery({
     queryKey: ['browsers'],

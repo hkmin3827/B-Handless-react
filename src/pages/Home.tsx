@@ -3,9 +3,52 @@ import { useQuery } from '@tanstack/react-query'
 import { api, type StartupItem } from '../api'
 import ItemCard from '../components/ItemCard'
 import ItemModal from '../components/ItemModal'
+import HeroGraphic from '../components/HeroGraphic'
 
-export default function Home() {
-  const [modal, setModal] = useState<{ open: boolean; item?: StartupItem }>({ open: false })
+type Page = 'home' | 'web' | 'app' | 'exe' | 'settings'
+
+interface Props {
+  onNavigate: (page: Page) => void
+}
+
+const CATEGORIES = [
+  {
+    id: 'web' as Page,
+    label: '웹',
+    icon: '🌐',
+    color: '#4D96FF',
+    pastel: '#EEF4FF',
+    types: ['browser_url'] as StartupItem['type'][],
+    defaultType: 'browser_url' as StartupItem['type'],
+  },
+  {
+    id: 'app' as Page,
+    label: '앱',
+    icon: '📦',
+    color: '#FF9A3C',
+    pastel: '#FFF4EB',
+    types: ['app'] as StartupItem['type'][],
+    defaultType: 'app' as StartupItem['type'],
+  },
+  {
+    id: 'exe' as Page,
+    label: '실행파일',
+    icon: '💻',
+    color: '#6BCB77',
+    pastel: '#EEFBF0',
+    types: ['exe', 'uploaded_exe'] as StartupItem['type'][],
+    defaultType: 'exe' as StartupItem['type'],
+  },
+]
+
+const PREVIEW_COUNT = 2
+
+export default function Home({ onNavigate }: Props) {
+  const [modal, setModal] = useState<{
+    open: boolean
+    item?: StartupItem
+    defaultType?: StartupItem['type']
+  }>({ open: false })
 
   const { data: items = [], isLoading, isError } = useQuery({
     queryKey: ['items'],
@@ -13,89 +56,163 @@ export default function Home() {
     refetchInterval: 5000,
   })
 
-  const enabled  = items.filter(i => i.enabled)
-  const disabled = items.filter(i => !i.enabled)
-
   return (
-    <div className="flex flex-col gap-6 p-6 h-full overflow-y-auto">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: 24, height: '100%', overflowY: 'auto' }}>
       {/* 헤더 */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-xl font-bold m-0" style={{ color: '#1E293B' }}>시작 항목</h1>
-          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
-            부팅 시 자동으로 실행할 항목을 관리합니다
-          </p>
-        </div>
-        <button
-          className="btn-primary px-4 py-2 text-sm"
-          onClick={() => setModal({ open: true })}
-        >
-          + 항목 추가
-        </button>
+      <div>
+        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: '#1E293B' }}>홈</h1>
+        <p style={{ margin: '4px 0 0', fontSize: 12, color: '#64748B' }}>
+          카테고리별 시작 항목을 한눈에 확인합니다
+        </p>
       </div>
 
-      {/* 로딩 / 에러 */}
-      {isLoading && (
-        <div className="flex items-center justify-center flex-1">
-          <p style={{ color: '#94A3B8' }}>불러오는 중…</p>
-        </div>
-      )}
+      {/* 에러 */}
       {isError && (
-        <div className="glass-sm p-4 text-sm" style={{ color: '#DC2626' }}>
+        <div className="glass-sm" style={{ padding: 14, fontSize: 13, color: '#DC2626' }}>
           ⚠️ API 서버에 연결할 수 없습니다. <code>python main.py --serve</code>가 실행 중인지 확인해 주세요.
         </div>
       )}
 
-      {/* 활성 항목 */}
-      {!isLoading && !isError && (
-        <>
-          {enabled.length > 0 && (
-            <section className="flex flex-col gap-3">
-              <h2 className="text-xs font-semibold uppercase tracking-wider m-0"
-                style={{ color: '#94A3B8' }}>
-                활성 ({enabled.length})
-              </h2>
-              <div className="grid gap-4"
-                style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
-                {enabled.map(item => (
-                  <ItemCard key={item.id} item={item} onEdit={i => setModal({ open: true, item: i })} />
-                ))}
-              </div>
-            </section>
-          )}
+      {/* 메인 2단 레이아웃 */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: 20, flex: 1, minHeight: 0 }}>
 
-          {/* 비활성 항목 */}
-          {disabled.length > 0 && (
-            <section className="flex flex-col gap-3">
-              <h2 className="text-xs font-semibold uppercase tracking-wider m-0"
-                style={{ color: '#94A3B8' }}>
-                비활성 ({disabled.length})
-              </h2>
-              <div className="grid gap-4"
-                style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
-                {disabled.map(item => (
-                  <ItemCard key={item.id} item={item} onEdit={i => setModal({ open: true, item: i })} />
-                ))}
-              </div>
-            </section>
-          )}
+        {/* 좌측: 카테고리별 미리보기 */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
+          {CATEGORIES.map(cat => {
+            const catItems = items.filter(i => (cat.types as string[]).includes(i.type))
+            const preview  = catItems.slice(0, PREVIEW_COUNT)
+            const hasMore  = catItems.length > PREVIEW_COUNT
 
-          {/* 빈 상태 */}
-          {items.length === 0 && (
-            <div className="glass flex flex-col items-center justify-center gap-4 flex-1 min-h-48">
-              <span style={{ fontSize: 48 }}>🚀</span>
-              <p className="text-sm" style={{ color: '#64748B' }}>
-                아직 항목이 없어요. 위의 버튼으로 추가해 보세요!
-              </p>
-            </div>
-          )}
-        </>
-      )}
+            return (
+              <section key={cat.id} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {/* 섹션 헤더 */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{
+                      width: 30, height: 30, borderRadius: 8,
+                      background: cat.pastel,
+                      border: `1.5px solid ${cat.color}25`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 15,
+                    }}>
+                      {cat.icon}
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#1E293B' }}>
+                      {cat.label}
+                    </span>
+                    <span style={{
+                      fontSize: 11, fontWeight: 600,
+                      padding: '1px 7px', borderRadius: 20,
+                      background: cat.color + '18',
+                      color: cat.color,
+                    }}>
+                      {catItems.length}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => onNavigate(cat.id)}
+                    style={{
+                      fontSize: 12, color: cat.color, fontWeight: 600,
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      padding: '4px 8px', borderRadius: 6,
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = cat.color + '12')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                  >
+                    더보기 →
+                  </button>
+                </div>
+
+                {/* 미리보기 카드 */}
+                {isLoading ? (
+                  <div style={{ padding: '20px 0', textAlign: 'center', color: '#94A3B8', fontSize: 13 }}>
+                    불러오는 중…
+                  </div>
+                ) : preview.length > 0 ? (
+                  <>
+                    <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+                      {preview.map(item => (
+                        <ItemCard
+                          key={item.id}
+                          item={item}
+                          onEdit={i => setModal({ open: true, item: i })}
+                        />
+                      ))}
+                    </div>
+                    {hasMore && (
+                      <button
+                        onClick={() => onNavigate(cat.id)}
+                        style={{
+                          alignSelf: 'flex-start',
+                          fontSize: 12, color: '#64748B',
+                          background: 'none', border: '1px dashed #CBD5E1',
+                          borderRadius: 8, cursor: 'pointer',
+                          padding: '6px 14px',
+                          transition: 'all 0.15s',
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.borderColor = cat.color
+                          e.currentTarget.style.color = cat.color
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.borderColor = '#CBD5E1'
+                          e.currentTarget.style.color = '#64748B'
+                        }}
+                      >
+                        +{catItems.length - PREVIEW_COUNT}개 더 보기
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <div style={{
+                    padding: '14px 16px', borderRadius: 12,
+                    background: cat.pastel,
+                    border: `1px dashed ${cat.color}30`,
+                    display: 'flex', alignItems: 'center', gap: 10,
+                  }}>
+                    <span style={{ fontSize: 18 }}>{cat.icon}</span>
+                    <span style={{ fontSize: 12, color: '#64748B' }}>
+                      아직 {cat.label} 항목이 없어요.
+                    </span>
+                    <button
+                      onClick={() => setModal({ open: true, defaultType: cat.defaultType })}
+                      style={{
+                        marginLeft: 'auto', fontSize: 12, fontWeight: 600,
+                        color: cat.color, background: 'none',
+                        border: `1px solid ${cat.color}40`, borderRadius: 6,
+                        cursor: 'pointer', padding: '4px 10px',
+                      }}
+                    >
+                      + 추가
+                    </button>
+                  </div>
+                )}
+              </section>
+            )
+          })}
+        </div>
+
+        {/* 우측: HeroGraphic */}
+        <div style={{
+          position: 'sticky', top: 0,
+          height: 'fit-content',
+          background: 'linear-gradient(135deg, #EEF4FF 0%, #F5EEFF 100%)',
+          borderRadius: 20,
+          border: '1px solid rgba(111,159,242,0.15)',
+          overflow: 'hidden',
+          padding: '8px 0',
+          boxShadow: '0 4px 20px rgba(111,159,242,0.10)',
+        }}>
+          <HeroGraphic />
+        </div>
+      </div>
 
       {/* 모달 */}
       {modal.open && (
         <ItemModal
           item={modal.item}
+          defaultType={modal.defaultType}
           onClose={() => setModal({ open: false })}
         />
       )}

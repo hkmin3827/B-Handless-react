@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #6F9FF2;
+  --color-secondary: #B864D4;
+  --color-white-soft: #F5F5F5;
+
+  --color-badge-red:    #FF6B6B;
+  --color-badge-yellow: #FFD93D;
+  --color-badge-green:  #6BCB77;
+  --color-badge-blue:   #4D96FF;
+  --color-badge-pink:   #FF6FC8;
+  --color-badge-orange: #FF9A3C;
+
+  --font-sans: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
+}
+
+/* ── 전체 배경 ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1040 35%, #2d1b69 70%, #1a0533 100%);
+  min-height: 100vh;
+  color: #F5F5F5;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+#root { height: 100vh; display: flex; }
+
+/* ── 글래스 카드 ───────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.glass-sm {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+/* ── 배경 장식 orb ─────────────────────────────────────── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.22;
+  z-index: 0;
+}
+
+/* ── 스크롤바 ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(111,159,242,0.4); border-radius: 2px; }
+
+/* ── 토글 스위치 ───────────────────────────────────────── */
+.toggle-track {
+  width: 44px; height: 24px;
+  border-radius: 12px;
+  transition: background 0.2s;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.toggle-track.on  { background: linear-gradient(90deg, #6F9FF2, #B864D4); }
+.toggle-track.off { background: rgba(255,255,255,0.15); }
+.toggle-thumb {
+  position: absolute; top: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #F5F5F5;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: left 0.2s;
+}
+.toggle-track.on  .toggle-thumb { left: 23px; }
+.toggle-track.off .toggle-thumb { left: 3px; }
+
+/* ── 버튼 ──────────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, #6F9FF2, #B864D4);
+  border: none; border-radius: 10px;
+  color: #F5F5F5; font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(111,159,242,0.45); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-ghost {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; color: #F5F5F5;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.13); }
+
+.btn-danger {
+  background: rgba(255,107,107,0.15);
+  border: 1px solid rgba(255,107,107,0.3);
+  border-radius: 10px; color: #FF6B6B;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-danger:hover { background: rgba(255,107,107,0.25); }
+
+/* ── 모달 오버레이 ─────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+
+/* ── 입력 필드 ─────────────────────────────────────────── */
+.input-glass {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: #F5F5F5;
+  padding: 10px 14px;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-glass::placeholder { color: rgba(245,245,245,0.35); }
+.input-glass:focus { border-color: rgba(111,159,242,0.6); box-shadow: 0 0 0 3px rgba(111,159,242,0.15); }
+
+/* ── 셀렉트 ────────────────────────────────────────────── */
+.select-glass {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: #F5F5F5;
+  padding: 10px 14px;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+.select-glass option { background: #1a1040; }

@@ -1,4 +1,10 @@
 import { useState } from 'react'
+import homeIcon from '../assets/icons/home-icon.png'
+import webIcon from '../assets/icons/web-icon.png'
+import appIcon from '../assets/icons/app-icon.png'
+import exeIcon from '../assets/icons/exe-file-icon.png'
+import settingIcon from '../assets/icons/setting-icon.png'
+import rocketIcon from '../assets/icons/rocket-icon.png'
 
 interface NavItem {
   id: string
@@ -8,11 +14,11 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { id: 'home',     icon: '⚡', label: '홈' },
-  { id: 'web',      icon: '🌐', label: '웹',        dividerBefore: true },
-  { id: 'app',      icon: '📦', label: '앱' },
-  { id: 'exe',      icon: '💻', label: '실행파일' },
-  { id: 'settings', icon: '⚙️', label: '설정',      dividerBefore: true },
+  { id: 'home', icon: homeIcon, label: '홈' },
+  { id: 'web', icon: webIcon, label: '웹', dividerBefore: true },
+  { id: 'app', icon: appIcon, label: '앱' },
+  { id: 'exe', icon: exeIcon, label: '실행파일' },
+  { id: 'settings', icon: settingIcon, label: '설정', dividerBefore: true },
 ]
 
 interface Props {
@@ -26,10 +32,10 @@ export default function Sidebar({ current, onChange }: Props) {
   return (
     <aside
       style={{
-        width: expanded ? 200 : 64,
+        width: expanded ? 200 : 70,
         margin: '12px 0 12px 12px',
         height: 'calc(100vh - 24px)',
-        background: 'linear-gradient(180deg, #1E2B4A 0%, #2A1B5E 100%)',
+        background: 'linear-gradient(180deg, #F5F5F5 0%, #F5F5F5 100%)',
         borderRadius: 16,
         display: 'flex',
         flexDirection: 'column',
@@ -55,7 +61,7 @@ export default function Sidebar({ current, onChange }: Props) {
         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         title={expanded ? '접기' : '펼치기'}
       >
-        <span style={{ fontSize: 22, flexShrink: 0 }}>🚀</span>
+        <img src={rocketIcon} style={{ width: 30, height: 30, flexShrink: 0 }} alt="logo" />
         {expanded && (
           <span style={{ fontWeight: 800, fontSize: 13, color: '#A8C5FA', whiteSpace: 'nowrap', letterSpacing: 0.5 }}>
             B-Handless
@@ -74,7 +80,7 @@ export default function Sidebar({ current, onChange }: Props) {
                   height: 1,
                   background: 'rgba(111,159,242,0.15)',
                   margin: '6px 4px',
-                }}/>
+                }} />
               )}
               <button
                 onClick={() => onChange(item.id)}
@@ -102,11 +108,9 @@ export default function Sidebar({ current, onChange }: Props) {
                     position: 'absolute', left: 0, top: '20%', bottom: '20%',
                     width: 3, borderRadius: 2,
                     background: 'linear-gradient(180deg, #6F9FF2, #B864D4)',
-                  }}/>
+                  }} />
                 )}
-                <span style={{ fontSize: 17, flexShrink: 0, width: 24, textAlign: 'center' }}>
-                  {item.icon}
-                </span>
+                <img src={item.icon} style={{ width: 30, height: 30, flexShrink: 0 }} alt={item.label} />
                 {expanded && (
                   <span style={{
                     fontSize: 13, fontWeight: active ? 700 : 500,

@@ -24,7 +24,7 @@ const CATEGORY_META: Record<Category, {
   },
   app: {
     label: '앱',
-    icon: '📦',
+    icon: '📱',
     color: '#FF9A3C',
     desc: '자동 실행할 앱을 관리합니다',
     types: ['app'],
@@ -32,7 +32,7 @@ const CATEGORY_META: Record<Category, {
   },
   exe: {
     label: '실행파일',
-    icon: '💻',
+    icon: '📂',
     color: '#6BCB77',
     desc: '자동 실행할 EXE 파일을 관리합니다',
     types: ['exe', 'uploaded_exe'],
@@ -55,7 +55,7 @@ export default function CategoryPage({ category }: Props) {
   })
 
   const items = allItems.filter(i => (meta.types as string[]).includes(i.type))
-  const enabled  = items.filter(i => i.enabled)
+  const enabled = items.filter(i => i.enabled)
   const disabled = items.filter(i => !i.enabled)
 
   return (

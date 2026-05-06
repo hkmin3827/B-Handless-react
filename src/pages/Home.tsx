@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api, type StartupItem } from '../api'
 import ItemCard from '../components/ItemCard'
@@ -24,8 +24,8 @@ const CATEGORIES = [
   {
     id: 'app' as Page,
     label: '앱',
-    icon: '📦',
-    color: '#FF9A3C',
+    icon: '📱',
+    color: '#f9823dff',
     pastel: '#FFF4EB',
     types: ['app'] as StartupItem['type'][],
     defaultType: 'app' as StartupItem['type'],
@@ -33,8 +33,8 @@ const CATEGORIES = [
   {
     id: 'exe' as Page,
     label: '실행파일',
-    icon: '💻',
-    color: '#6BCB77',
+    icon: '📂',
+    color: '#3f9c4cff',
     pastel: '#EEFBF0',
     types: ['exe', 'uploaded_exe'] as StartupItem['type'][],
     defaultType: 'exe' as StartupItem['type'],
@@ -49,6 +49,13 @@ export default function Home({ onNavigate }: Props) {
     item?: StartupItem
     defaultType?: StartupItem['type']
   }>({ open: false })
+
+  const [wide, setWide] = useState(window.innerWidth > 1000)
+  useEffect(() => {
+    const handler = () => setWide(window.innerWidth > 1000)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
 
   const { data: items = [], isLoading, isError } = useQuery({
     queryKey: ['items'],
@@ -74,14 +81,14 @@ export default function Home({ onNavigate }: Props) {
       )}
 
       {/* 메인 2단 레이아웃 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: 20, flex: 1, minHeight: 0 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: wide ? '1fr 420px' : '1fr', gap: 20, flex: 1, minHeight: 0 }}>
 
         {/* 좌측: 카테고리별 미리보기 */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
           {CATEGORIES.map(cat => {
             const catItems = items.filter(i => (cat.types as string[]).includes(i.type))
-            const preview  = catItems.slice(0, PREVIEW_COUNT)
-            const hasMore  = catItems.length > PREVIEW_COUNT
+            const preview = catItems.slice(0, PREVIEW_COUNT)
+            const hasMore = catItems.length > PREVIEW_COUNT
 
             return (
               <section key={cat.id} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -172,7 +179,7 @@ export default function Home({ onNavigate }: Props) {
                     display: 'flex', alignItems: 'center', gap: 10,
                   }}>
                     <span style={{ fontSize: 18 }}>{cat.icon}</span>
-                    <span style={{ fontSize: 12, color: '#64748B' }}>
+                    <span style={{ fontSize: 12, color: '#4f535aff' }}>
                       아직 {cat.label} 항목이 없어요.
                     </span>
                     <button
@@ -193,19 +200,20 @@ export default function Home({ onNavigate }: Props) {
           })}
         </div>
 
-        {/* 우측: HeroGraphic */}
-        <div style={{
-          position: 'sticky', top: 0,
-          height: 'fit-content',
-          background: 'linear-gradient(135deg, #EEF4FF 0%, #F5EEFF 100%)',
-          borderRadius: 20,
-          border: '1px solid rgba(111,159,242,0.15)',
-          overflow: 'hidden',
-          padding: '8px 0',
-          boxShadow: '0 4px 20px rgba(111,159,242,0.10)',
-        }}>
-          <HeroGraphic />
-        </div>
+        {wide && (
+          <div style={{
+            position: 'sticky', top: 0,
+            height: 'fit-content',
+            background: 'linear-gradient(135deg, #EEF4FF 0%, #F5EEFF 100%)',
+            borderRadius: 20,
+            border: '1px solid rgba(111,159,242,0.15)',
+            overflow: 'hidden',
+            padding: '8px 0',
+            boxShadow: '0 4px 20px rgba(111,159,242,0.10)',
+          }}>
+            <HeroGraphic />
+          </div>
+        )}
       </div>
 
       {/* 모달 */}

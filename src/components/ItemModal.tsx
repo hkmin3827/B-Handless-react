@@ -71,8 +71,8 @@ export default function ItemModal({ item, defaultType, onClose }: Props) {
             onChange={e => set('type', e.target.value)}
           >
             <option value="browser_url">🌐 웹 URL 열기</option>
-            <option value="exe">⚙️ 실행 파일 (EXE)</option>
-            <option value="app">📦 앱</option>
+            <option value="exe">📂 실행 파일 (EXE)</option>
+            <option value="app">📱 앱</option>
           </select>
         </div>
 

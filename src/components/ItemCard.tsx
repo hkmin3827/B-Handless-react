@@ -4,10 +4,10 @@ import { api, type StartupItem } from '../api'
 import Toggle from './Toggle'
 
 const TYPE_META: Record<string, { label: string; color: string; icon: string }> = {
-  browser_url:  { label: 'URL',    color: '#4D96FF', icon: '🌐' },
-  exe:          { label: 'EXE',    color: '#6BCB77', icon: '⚙️' },
-  app:          { label: 'APP',    color: '#FF9A3C', icon: '📦' },
-  uploaded_exe: { label: 'UPLOAD', color: '#FF6FC8', icon: '📤' },
+  browser_url: { label: 'URL', color: '#4D96FF', icon: '🌐' },
+  exe: { label: 'EXE', color: '#6BCB77', icon: '⚙️' },
+  app: { label: 'APP', color: '#FF9A3C', icon: '📱' },
+  uploaded_exe: { label: 'UPLOAD', color: '#FF6FC8', icon: '📂' },
 }
 
 interface Props {

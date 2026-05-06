@@ -10,6 +10,7 @@ export interface StartupItem {
   browser?: string
   path?: string
   args?: string[]
+  icon_b64?: string
 }
 
 export interface AppSettings {
@@ -23,6 +24,11 @@ export interface Browser {
   id: string
   label: string
   installed: boolean
+}
+
+export interface AppSearchResult {
+  name: string
+  path: string
 }
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
@@ -55,5 +61,13 @@ export const api = {
   },
   browsers: {
     list: () => request<Browser[]>('GET', '/browsers'),
+  },
+  startup: {
+    register:   () => request<{ ok: boolean }>('POST', '/startup/register'),
+    unregister: () => request<{ ok: boolean }>('POST', '/startup/unregister'),
+  },
+  apps: {
+    search: (q: string) => request<AppSearchResult[]>('GET', `/apps/search?q=${encodeURIComponent(q)}`),
+    icon: (path: string) => request<{ icon: string | null }>('GET', `/apps/icon?path=${encodeURIComponent(path)}`),
   },
 }

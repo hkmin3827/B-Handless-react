@@ -61,10 +61,19 @@ export default function ItemCard({ item, onEdit }: Props) {
         />
       </div>
 
-      {/* 라벨 */}
-      <p className="font-semibold text-sm leading-snug" style={{ color: '#1E293B' }}>
-        {item.label}
-      </p>
+      {/* 라벨 + 아이콘 */}
+      <div className="flex items-center gap-2">
+        {item.icon_b64 && (
+          <img
+            src={`data:image/png;base64,${item.icon_b64}`}
+            style={{ width: 24, height: 24, flexShrink: 0, borderRadius: 4 }}
+            alt=""
+          />
+        )}
+        <p className="font-semibold text-sm leading-snug" style={{ color: '#1E293B' }}>
+          {item.label}
+        </p>
+      </div>
 
       {/* 부가 정보 */}
       <p className="text-xs truncate" style={{ color: '#64748B' }}>

@@ -14,6 +14,12 @@ export default function Settings() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['settings'] }),
   })
 
+  const startupMut = useMutation({
+    mutationFn: (enable: boolean) =>
+      enable ? api.startup.register() : api.startup.unregister(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['settings'] }),
+  })
+
   if (isLoading || !settings) {
     return (
       <div className="flex items-center justify-center flex-1 p-6">
@@ -53,6 +59,9 @@ export default function Settings() {
               }}
             />
           </div>
+          <p className="text-xs" style={{ color: '#94A3B8' }}>
+            ⚠️ 변경사항은 서버 재시작 후 적용됩니다
+          </p>
         </div>
       ))}
 
@@ -72,23 +81,31 @@ export default function Settings() {
         </button>
       </div>
 
-      {/* 시작 프로그램 등록 상태 (읽기 전용 표시) */}
-      <div className="glass-sm p-4 flex items-center justify-between gap-4">
+      {/* Windows 시작 프로그램 등록 토글 */}
+      <div className="glass p-4 flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold m-0" style={{ color: '#1E293B' }}>Windows 시작 등록</p>
           <p className="text-xs m-0" style={{ color: '#64748B' }}>
-            python main.py --register 명령으로 변경
+            {settings.registered_as_startup
+              ? 'PC 부팅 시 B-Handless가 자동 실행됩니다'
+              : '켜면 PC 부팅 시 자동으로 실행 항목을 시작합니다'}
           </p>
+          {settings.registered_as_startup && (
+            <p className="text-xs mt-1" style={{ color: '#F59E0B' }}>
+              ⚠️ 앱 삭제 전 반드시 이 항목을 OFF로 설정하세요
+            </p>
+          )}
+          {startupMut.isError && (
+            <p className="text-xs mt-1" style={{ color: '#DC2626' }}>등록 변경에 실패했습니다</p>
+          )}
         </div>
-        <span
-          className="text-xs px-2 py-1 rounded-full font-medium"
-          style={settings.registered_as_startup
-            ? { background: 'rgba(107,203,119,0.15)', color: '#16A34A' }
-            : { background: 'rgba(148,163,184,0.15)', color: '#94A3B8' }
-          }
+        <button
+          className={`toggle-track ${settings.registered_as_startup ? 'on' : 'off'}`}
+          onClick={() => startupMut.mutate(!settings.registered_as_startup)}
+          disabled={startupMut.isPending}
         >
-          {settings.registered_as_startup ? '✅ 등록됨' : '미등록'}
-        </span>
+          <div className="toggle-thumb" />
+        </button>
       </div>
     </div>
   )

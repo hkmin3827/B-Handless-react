@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { api, type StartupItem } from '../api'
+import { api, type AppSearchResult, type StartupItem } from '../api'
 
 interface Props {
   item?: StartupItem
@@ -19,6 +19,42 @@ const EMPTY = {
   args: [] as string[],
 }
 
+function AppResultRow({ app, onSelect }: { app: AppSearchResult; onSelect: (a: AppSearchResult) => void }) {
+  const [icon, setIcon] = useState<string | null>(null)
+
+  useEffect(() => {
+    api.apps.icon(app.path).then(r => setIcon(r.icon)).catch(() => {})
+  }, [app.path])
+
+  return (
+    <button
+      onClick={() => onSelect(app)}
+      style={{
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '7px 10px', borderRadius: 8,
+        border: 'none', background: 'transparent',
+        cursor: 'pointer', textAlign: 'left', width: '100%',
+        transition: 'background 0.12s',
+      }}
+      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(111,159,242,0.12)')}
+      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+    >
+      {icon
+        ? <img src={`data:image/png;base64,${icon}`} style={{ width: 24, height: 24, flexShrink: 0 }} alt="" />
+        : <div style={{ width: 24, height: 24, borderRadius: 4, background: 'rgba(111,159,242,0.15)', flexShrink: 0 }} />
+      }
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#1E293B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {app.name}
+        </span>
+        <span style={{ fontSize: 10, color: '#94A3B8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {app.path}
+        </span>
+      </div>
+    </button>
+  )
+}
+
 export default function ItemModal({ item, defaultType, onClose }: Props) {
   const qc = useQueryClient()
   const isEdit = !!item
@@ -26,6 +62,11 @@ export default function ItemModal({ item, defaultType, onClose }: Props) {
   const base = defaultType ? { ...EMPTY, type: defaultType } : EMPTY
   const [form, setForm] = useState({ ...base, ...item })
   const [error, setError] = useState('')
+  const [appInputMode, setAppInputMode] = useState<'manual' | 'search'>('search')
+  const [searchQ, setSearchQ] = useState('')
+  const [searchResults, setSearchResults] = useState<AppSearchResult[]>([])
+  const [searching, setSearching] = useState(false)
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => { setForm({ ...base, ...item }) }, [item]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -47,6 +88,31 @@ export default function ItemModal({ item, defaultType, onClose }: Props) {
   })
 
   const set = (k: string, v: unknown) => setForm(f => ({ ...f, [k]: v }))
+
+  const handleSearchChange = (q: string) => {
+    setSearchQ(q)
+    if (searchTimer.current) clearTimeout(searchTimer.current)
+    if (!q.trim()) { setSearchResults([]); return }
+    setSearching(true)
+    searchTimer.current = setTimeout(async () => {
+      try {
+        const results = await api.apps.search(q)
+        setSearchResults(results)
+      } catch {
+        setSearchResults([])
+      } finally {
+        setSearching(false)
+      }
+    }, 300)
+  }
+
+  const selectApp = (app: AppSearchResult) => {
+    set('path', app.path)
+    if (!form.label) set('label', app.name)
+    setAppInputMode('manual')
+    setSearchQ('')
+    setSearchResults([])
+  }
 
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
@@ -119,14 +185,76 @@ export default function ItemModal({ item, defaultType, onClose }: Props) {
 
         {/* exe/app 전용 */}
         {(form.type === 'exe' || form.type === 'app') && (
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium" style={{ color: '#64748B' }}>실행 파일 경로</label>
-            <input
-              className="input-glass"
-              placeholder="C:\Program Files\App\app.exe"
-              value={form.path}
-              onChange={e => set('path', e.target.value)}
-            />
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium" style={{ color: '#64748B' }}>실행 파일 경로</label>
+              {form.type === 'app' && (
+                <div style={{ display: 'flex', gap: 4 }}>
+                  {(['search', 'manual'] as const).map(mode => (
+                    <button
+                      key={mode}
+                      onClick={() => setAppInputMode(mode)}
+                      style={{
+                        fontSize: 11, padding: '2px 10px', borderRadius: 6,
+                        border: '1px solid',
+                        borderColor: appInputMode === mode ? '#6F9FF2' : 'rgba(111,159,242,0.25)',
+                        background: appInputMode === mode ? 'rgba(111,159,242,0.15)' : 'transparent',
+                        color: appInputMode === mode ? '#4D7FE8' : '#94A3B8',
+                        cursor: 'pointer', fontWeight: appInputMode === mode ? 700 : 400,
+                        transition: 'all 0.15s',
+                      }}
+                    >
+                      {mode === 'manual' ? '직접 입력' : '🔍 앱 검색'}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 직접 입력 */}
+            {(form.type === 'exe' || appInputMode === 'manual') && (
+              <input
+                className="input-glass"
+                placeholder="C:\Program Files\App\app.exe"
+                value={form.path}
+                onChange={e => set('path', e.target.value)}
+              />
+            )}
+
+            {/* 앱 검색 */}
+            {form.type === 'app' && appInputMode === 'search' && (
+              <div className="flex flex-col gap-2">
+                <input
+                  className="input-glass"
+                  placeholder="앱 이름을 입력하세요 (예: Chrome, KakaoTalk)"
+                  value={searchQ}
+                  onChange={e => handleSearchChange(e.target.value)}
+                  autoFocus
+                />
+                {searching && (
+                  <p style={{ fontSize: 12, color: '#94A3B8', margin: 0, textAlign: 'center' }}>검색 중…</p>
+                )}
+                {!searching && searchResults.length > 0 && (
+                  <div style={{
+                    maxHeight: 220, overflowY: 'auto',
+                    display: 'flex', flexDirection: 'column', gap: 2,
+                    borderRadius: 10,
+                    border: '1px solid rgba(111,159,242,0.2)',
+                    background: 'rgba(255,255,255,0.6)',
+                    padding: 4,
+                  }}>
+                    {searchResults.map((app, i) => (
+                      <AppResultRow key={i} app={app} onSelect={selectApp} />
+                    ))}
+                  </div>
+                )}
+                {!searching && searchQ.trim() && searchResults.length === 0 && (
+                  <p style={{ fontSize: 12, color: '#94A3B8', margin: 0, textAlign: 'center' }}>
+                    검색 결과가 없습니다
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
 
